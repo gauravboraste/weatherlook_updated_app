@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load myfilters %}
+{% now "U" %}
+{% block title %}{{city_name}} {% endblock title %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .forecast-container {
+            width: 100%;
+            background: #323544;
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-top: 80px;
+            margin-bottom: 50px;
+            }
+            .forecast-container .forecast {
+                display: table-cell;
+                vertical-align: top; }
+                .forecast-container .forecast:nth-child(even) {
+                    background-color: #262936; }
+                  @media screen and (max-width: 990px) {
+                    .forecast-container .forecast {
+                      display: block;
+                      width: 16.6667%;
+                      float: left; } }
+                  .forecast-container .forecast.today {
+                    width: 520px; }
+                    .forecast-container .forecast.today .forecast-header {
+                        *zoom: 1; }
+                        .forecast-container .forecast.today .forecast-header:after {
+                          content: " ";
+                          clear: both;
+                          display: block;
+                          overflow: hidden;
+                          height: 0; }
+                        .forecast-container .forecast.today .forecast-header .day {
+                          float: left; }
+                        .forecast-container .forecast.today .forecast-header .date {
+                          float: right; }
+                      .forecast-container .forecast.today .forecast-content {
+                        text-align: left;
+                        padding-top: 200px;
+                        padding-bottom: 30px; }
+                      .forecast-container .forecast.today .location {
+                        font-size: 18px;
+                        font-size: 1.2857142857em;
+                        font-weight: 400; }
+                      .forecast-container .forecast.today .degree .num, .forecast-container .forecast.today .degree .forecast-icon {
+                        display: inline-block;
+                        vertical-align: middle; }
+                      .forecast-container .forecast.today .degree .num {
+                        font-size: 90px;
+                        font-size: 6.4285714286rem;
+                        margin-right: 30px; }
+                      .forecast-container .forecast.today span {
+                        margin-right: 20px; }
+                        .forecast-container .forecast.today span img {
+                          margin-right: 5px;
+                          vertical-align: middle; }
+                      @media screen and (max-width: 990px) {
+                        .forecast-container .forecast.today {
+                          display: block;
+                          width: 100%; } }
+                    .forecast-container .forecast .forecast-header {
+                      background: rgba(0, 0, 0, 0.1);
+                      padding: 10px;
+                      text-align: center;
+                      font-weight: 400; }
+                    .forecast-container .forecast .forecast-icon {
+                      height: 50px; }
+                    .forecast-container .forecast .forecast-content {
+                      padding: 50px 20px 10px;
+                      text-align: center; }
+                      .forecast-container .forecast .forecast-content .forecast-icon {
+                        margin-bottom: 20px; }
+                      .forecast-container .forecast .forecast-content .degree {
+                        font-size: 24px;
+                        font-size: 1.7142857143em;
+                        color: white;
+                        font-weight: 700; }
+                      .forecast-container .forecast .forecast-content small {
+                        font-size: 16px;
+                        font-size: 1.1428571429em; }
+                        .forecast-container .forecast .forecast-content .degree {
+                            font-size: 24px;
+                            font-size: 1.7142857143em;
+                            color: white;
+                            font-weight: 400; }
+    </style>
+
+</head>
+<body style="color:white">
+    <div class="forecast-table">
+        <div class="container">
+            <div class="forecast-container">
+                <div class="today forecast">
+                    <div class="forecast-header">
+                        <div class="day">{{prev.current.dt|timestamp_to_time|date:"D, d M, Y h:i a"}}</div>
+                        <div class="date">{% now "l" %}</div>
+                    </div> <!-- .forecast-header -->
+                    <div class="forecast-content">
+                        <div class="location"><b>{{city|capfirst}}</b></div>
+                        <div class="degree">
+                            <div class="num">{{prev.current.temp|ftoc|floatformat:"1"}}<sup>o</sup>C</div>
+                              {% for d in prev.current.weather %}
+                            <div class="forecast-icon">
+                                <img src="http://openweathermap.org/img/wn/{{d.icon}}@2x.png" alt="" width=90>
+                            </div>
+                        </div>
+                     {% endfor %}
+                        <span><img style="height: 25px; width: 25px" src="{%static 'images/cloud.png' %}"
+                                alt="">{{prev.current.clouds}}%</span>
+                        <span><img src="{%static 'images/icon-wind.png' %}" alt="">{{prev.current.wind_speed}}km/h</span>
+
+                        
+                        <span><img src="{%static 'images/icon-compass.png' %}" alt="degree">{{prev.current.wind_deg}}<sup> o</sup></span>
+                        
+                           {% for d in prev.current.weather %}
+                        <span><img style="height: 25px; width: 25px;" src="{%static 'images/hot.png' %}"
+                                alt="status">{{d.description }}</span>
+                               
+                                  {% endfor %}
+                    </div>
+                </div>
+
+             {% for i in prev.hourly%}
+
+
+ {% if forloop.counter < 5 %}
+             <div class="forecast">
+
+                    <div class="forecast-header">
+                     
+                        <div class="day"> {{i.dt|timestamp_to_time|date:"D, d M, Y h:i a" }} </div>
+                  
+                    </div> <!-- .forecast-header -->
+                    <div class="forecast-content">
+                          {% for e in i.weather %}
+                        <div class="forecast-icon">
+                            <img src="http://openweathermap.org/img/wn/{{e.icon}}@2x.png" alt="" width=78><br>
+                            <small><b>{{e.main}}</b></small>
+                        </div>
+                         {% endfor %}
+                        <br></br>
+                        <br>
+
+                       <small><b>Temperature</b></small> <div class="degree">{{i.temp|ftoc|floatformat:"1"}}<sup>o</sup>C</div>
+                      <br></br>
+                       <small><b>Pressure</b></small>
+                       <br>
+                       <small>{{i.pressure}}</small>
+                       <br></br>
+                       <small><b>Humidity</b></small>
+                       <br>
+                       <small>{{i.humidity }}</small>
+                       
+                    </div>
+                   
+                </div>
+                 {% endif %}
+                  {% endfor %}
+               
+                
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+{% endblock content %}

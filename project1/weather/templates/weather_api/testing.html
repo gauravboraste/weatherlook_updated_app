@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Gaurav</h1>
+   {% for d in prev.current.weather %}
+   {% for o in  d %}
+   {% comment %} {% for e in d.weather %} {% endcomment %}
+   {% comment %} {% for a in d.main %} {% endcomment %}
+ {% comment %} {% for k, v in data.items %}
+ {{ k }} - {{ v }}<br>
+ {% endfor %} {% endcomment %}
+ <h1>{{d.main}}</h1>
+{% comment %} {% endfor %} {% endcomment %}
+{% comment %} {% endfor %} {% endcomment %}
+{% endfor %}
+{% endfor %}
+
+</body>
+</html>
+{% endblock content %}
